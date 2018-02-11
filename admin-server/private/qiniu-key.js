@@ -1,0 +1,4 @@
+let QiniuKey = {
+    accessKey:'',
+    secretKey:'',
+};
