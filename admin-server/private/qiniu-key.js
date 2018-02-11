@@ -3,4 +3,4 @@ let QiniuKey = {
     secretKey:'',
 };
 
-export default QiniuKey
+export default QiniuKey;
