@@ -1,0 +1,1 @@
+parcel watch src/admin.html -d admin-server/dist/

@@ -1,0 +1,23 @@
+* {
+    border: 0;
+    margin: 0;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+@mixin showBackground {
+    background: #EEE;
+}
+
+body {
+    overflow: hidden;
+    #app {
+        overflow: hidden;
+        width: 100vw;
+        height: 100vh;
+        @include showBackground;
+    }
+}

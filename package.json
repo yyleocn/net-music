@@ -10,9 +10,11 @@
   "license": "ISC",
   "dependencies": {
     "leancloud-storage": "^3.6.0",
+    "node-sass": "^4.7.2",
     "qiniu": "^7.1.2"
   },
   "devDependencies": {
-    "axios": "^0.17.1"
+    "axios": "^0.17.1",
+    "qs": "^6.5.1"
   }
 }
