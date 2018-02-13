@@ -1,0 +1,4 @@
+exports.key = {
+    accessKey:'',
+    secretKey:'',
+};
