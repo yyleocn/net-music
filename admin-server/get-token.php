@@ -2,7 +2,7 @@
 require 'autoload.php';
 use Qiniu\Auth;
 
-include 'config.qiniu-key.php';
+include 'qiniu-key.config.php';
 
 // echo var_dump($_POST).','.$user.';';
 if (!checkLogin($_POST['user'], $_POST['password'])) {
