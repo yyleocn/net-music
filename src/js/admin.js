@@ -1,19 +1,22 @@
+const normalize_css = require('normalize.css');
+
 import '../css/admin.scss';
+const jQ = require("jquery");
 
-const axios = require('axios');
-const qs = require('qs');
-import * as Leancloud from './leancloud.js';
-
-axios.post('/get-token.php',
-    qs.stringify({
-        user: 'XiaoLe',
-        password: '123654789',
-    })
+jQ.ajax(
+    {
+        url: '/get-token.php',
+        type: 'post',
+        data: {
+            user: 'XiaoLe',
+            password: '123654',
+        },
+    }
 ).then((response_) => {
-    console.log(response_.data);
+    console.log(response_);
 }).catch((err_) => {
-    console.log(err_.response.data);
-    console.dir(err_);
+    console.log(err_.responseText);
 });
 
-console.log(Leancloud);
+// import * as Leancloud from './leancloud.js';
+// console.log(Leancloud);

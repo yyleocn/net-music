@@ -1,23 +1,55 @@
-* {
-    border: 0;
-    margin: 0;
-}
+@import "styleLib";
 
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 @mixin showBackground {
-    background: #EEE;
+  background: #eee;
 }
 
 body {
-    overflow: hidden;
-    #app {
-        overflow: hidden;
-        width: 100vw;
-        height: 100vh;
-        @include showBackground;
+  overflow: hidden;
+}
+
+#app {
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  @include showBackground;
+  @include flexCenter;
+}
+
+#login {
+  @include flexCenter;
+  @include boxShadow;
+  background: #eee;
+  flex-direction: column;
+  text-align: center;
+  width: 400px;
+  font-size: 1.5em;
+  border-radius: 0.5em;
+  overflow: hidden;
+  padding-bottom: 1em;
+  input {
+    display: block;
+    padding: 0.5em;
+    margin: 0 5em 1.5em;
+  }
+  .title {
+    width: 100%;
+    line-height: 4em;
+    background: #c11414;
+    color: #ffffff;
+    margin-bottom: 1.5em;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    div {
+      margin-left: 1em;
+      padding-right: 1em;
     }
+  }
 }
