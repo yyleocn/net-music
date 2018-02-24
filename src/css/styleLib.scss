@@ -1,34 +1,47 @@
 input {
-  border: none;
-  border-radius: 0.3em;
+    border: none;
+    border-radius: 0.3em;
 }
 
 .icon {
-  width: 1em;
-  height: 1em;
-  vertical-align: -0.15em;
-  fill: currentColor;
-  overflow: hidden;
+    width: 1em;
+    height: 1em;
+    vertical-align: -0.15em;
+    fill: currentColor;
+    overflow: hidden;
 }
 
-.large{
+.large {
     font-size: 2em;
 }
 
-@mixin pageCenter {
-  position: fixed;
-  top: auto;
-  left: auto;
-  right: auto;
-  bottom: auto;
+.pageCenter {
+    position: fixed;
+    top: auto;
+    left: auto;
+    right: auto;
+    bottom: auto;
 }
 
-@mixin flexCenter {
-  display: flex;
-  justify-content: center;
-  align-items: center;
+.flexCenter {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-@mixin boxShadow {
-  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
+.boxShadow {
+    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
 }
+
+@function darkColor($color_) {
+    @return darken($color_, 20%);
+}
+
+$green: #5cb85c;
+$green-dark: darkColor($green);
+$red: #e7594a;
+$red-dark: darkColor($red);
+$blue: #5bc0de;
+$blue-dark: darkColor($blue);
+$yellow: #ffe593;
+$yellow-dark: darkColor($yellow);

@@ -1,22 +1,17 @@
 const normalize_css = require('normalize.css');
 
 import '../css/admin.scss';
-const jQ = require("jquery");
+const jQ = require('jquery');
+window.jQ = jQ;
 
-jQ.ajax(
-    {
-        url: '/get-token.php',
-        type: 'post',
-        data: {
-            user: 'XiaoLe',
-            password: '123654',
-        },
+import loginInit from './login';
+
+new Promise((resolve_, reject_) => {
+    let config = JSON.parse(sessionStorage.getItem('uploadConfig'));
+    if (!config.QinniuToken) {
+        reject_();
     }
-).then((response_) => {
-    console.log(response_);
-}).catch((err_) => {
-    console.log(err_.responseText);
-});
-
+    resolve_(config);
+}).then().catch(loginInit)
 // import * as Leancloud from './leancloud.js';
 // console.log(Leancloud);

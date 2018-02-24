@@ -3,13 +3,13 @@ $accessKey = '';
 $secretKey = '';
 $bucket = '';
 
-$user = '';
+$account = '';
 $password = '';
 
-function checkLogin($user_, $password_)
+function checkLogin($account_, $password_)
 {
-    global $user,$password;
-    if ($user_ != $user) {
+    global $account,$password;
+    if ($account_ != $account) {
         return false;
     }
     if ($password_ != $password) {

@@ -5,12 +5,18 @@ use Qiniu\Auth;
 include 'qiniu-key-data.php';
 
 // echo var_dump($_POST).','.$user.';';
-if (!checkLogin($_POST['user'], $_POST['password'])) {
+if (!checkLogin($_POST['account'], $_POST['password'])) {
     http_response_code(403);
-    echo 'Invalid user or password';
+    echo '账号密码错误';
     exit();
 }
 
 $auth = new Auth($accessKey, $secretKey);
 $token = $auth->uploadToken($bucket);
-echo $token;
+header("Content-type: application/json; charset=utf-8");
+
+echo json_encode(
+    [
+        'QinniuToken'=>$token,
+    ]
+);
