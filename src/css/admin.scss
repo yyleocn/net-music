@@ -106,7 +106,7 @@ body {
             @extend .showBackground;
             @extend .flexLineCenter;
             justify-content: space-between;
-            padding: 0 1.5rem;
+            padding: 0 1rem;
             background: #FFFFFF;
             &:nth-child(2n) {
                 background: #F7f7f7;
@@ -117,13 +117,16 @@ body {
             }
             .info {
                 @extend .showBackground;
-                width: 60%;
+                width: 70%;
                 text-align: right;
                 .name {
-                    font-size: 1.2em;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    font-size: 1.3em;
+                    overflow: hidden;
                 }
                 .artist {
-                    margin-top: 0.25em;
+                    margin-top: 0.5em;
                 }
             }
             position: relative;
