@@ -1,11 +1,16 @@
 @import 'styleLib';
+$titleHeight:4rem;
 a {
     color: inherit;
     text-decoration: none;
 }
 
 .showBackground {
-    background: #eee;
+    background: linear-gradient(135deg, #FFF, #DDD);
+}
+
+.backgroundEEE {
+    background: #EEEEEE;
 }
 
 body {
@@ -16,44 +21,51 @@ body {
     overflow: hidden;
     width: 100vw;
     height: 100vh;
-    @extend .showBackground;
-    @extend .flexCenter;
+    @extend .backgroundEEE;
+    @extend .flexRowCenter;
+}
+
+.titleBox {
+    width: 100%;
+    line-height: $titleHeight;
+    background: #c11414;
+    color: #ffffff;
+    svg {
+        fill: #ffffff;
+    }
+    .icon {
+        height: 1.5em;
+        width: 1.5em;
+    }
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    div {
+        margin-left: 1rem;
+        padding-right: 1rem;
+    }
 }
 
 #login {
-    @extend .flexCenter;
+    @extend .flexRowCenter;
     @extend .boxShadow;
+    @extend .topBox;
     background: #eee;
     flex-direction: column;
     text-align: center;
     width: 400px;
-    font-size: 1.5em;
-    border-radius: 0.5em;
-    overflow: hidden;
-    padding-bottom: 1em;
+    font-size: 1.5rem;
+    padding-bottom: 1rem;
     .title {
-        width: 100%;
-        line-height: 4em;
-        background: #c11414;
-        color: #ffffff;
-        svg {
-            fill: #ffffff;
-        }
-        margin-bottom: 1.5em;
-        display: flex;
-        flex-direction: row;
-        justify-content: center;
-        align-items: center;
-        div {
-            margin-left: 1em;
-            padding-right: 1em;
-        }
+        @extend .titleBox;
+        margin-bottom: 1.5rem;
     }
     input {
-        padding: 0.5em;
+        padding: 0.5rem;
         &.input {
             display: block;
-            margin: 0 5em 1.5em;
+            margin: 0 5rem 1.5rem;
         }
         &.error {
             &::-webkit-input-placeholder {
@@ -68,5 +80,64 @@ body {
             color: #ffffff;
             background: $red-dark;
         }
+    }
+}
+
+#manage {
+    @extend .showBackground;
+    position: relative;
+    @extend .boxShadow;
+    @extend .topBox;
+    width: 1000px;
+    height: 700px;
+    .title {
+        width: 100%;
+        @extend .titleBox;
+        font-size: 1.5rem;
+    }
+    .songList {
+        position: absolute;
+        list-style: none;
+        width: 30%;
+        left: 0;
+        top: $titleHeight;
+        bottom: 0;
+        .song {
+            @extend .showBackground;
+            @extend .flexLineCenter;
+            justify-content: space-between;
+            padding: 0 1.5rem;
+            background: #FFFFFF;
+            &:nth-child(2n) {
+                background: #F7f7f7;
+            }
+            .cover {
+                height: 4rem;
+                border-radius: 0.5rem;
+            }
+            .info {
+                @extend .showBackground;
+                width: 60%;
+                text-align: right;
+                .name {
+                    font-size: 1.2em;
+                }
+                .artist {
+                    margin-top: 0.25em;
+                }
+            }
+            position: relative;
+            height: 5rem;
+        }
+        overflow-y: scroll;
+    }
+    .edit {
+        @extend .showBackground;
+        position: absolute;
+        font-size: 1.5rem;
+        width: 70%;
+        right: 0;
+        top: $titleHeight;
+        bottom: 0;
     }
 }

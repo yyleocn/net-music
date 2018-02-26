@@ -1,4 +1,5 @@
 "use strict";
+
 let addEvent = (elem_, type_, func_) => {
     if (window.addEventListener) {
         addEvent = (elem_, type_, func_) => {

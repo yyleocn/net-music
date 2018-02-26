@@ -1,10 +1,11 @@
 const normalize_css = require('normalize.css');
-
 import '../css/admin.scss';
-const jQ = require('jquery');
+
+import jQ from 'jquery';
 window.jQ = jQ;
 
 import loginInit from './login';
+import './sweetAlertCustom';
 
 new Promise((resolve_, reject_) => {
     let config = JSON.parse(sessionStorage.getItem('uploadConfig'));
@@ -12,6 +13,5 @@ new Promise((resolve_, reject_) => {
         reject_();
     }
     resolve_(config);
-}).then().catch(loginInit)
-// import * as Leancloud from './leancloud.js';
-// console.log(Leancloud);
+}).then().catch(loginInit);
+

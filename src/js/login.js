@@ -1,4 +1,4 @@
-const jQ = require('jquery');
+import jQ from 'jquery';
 import * as myLib from './myLib';
 
 let loginInit = () => {
@@ -38,22 +38,20 @@ let loginInit = () => {
                     account: form.find('input[name=account]').val(),
                     password: form.find('input[name=password]').val(),
                 };
-                jQ.ajax(
-                    {
-                        url: '/get-token.php',
-                        type: 'post',
-                        data: postData,
-                    }
-                ).then((response_) => {
+                jQ.ajax({
+                    url: '/get-token.php',
+                    type: 'post',
+                    data: postData,
+                }).then((response_) => {
                     sessionStorage.setItem(
                         'uploadConfig', JSON.stringify(response_)
                     );
                     myLib.reload('url');
                 }).catch((err_) => {
-                    form.find('input[name=account]')
-                        .attr('placeholder', err_.responseText)
-                        .addClass('error').val('');
-                    form.find('input[name=password]').val('');
+                    console.log(err_)
+                    swal.error({
+                        title_: err_.responseText,
+                    });
                 });
             });
         },
