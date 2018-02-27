@@ -4,8 +4,9 @@ import '../css/admin.scss';
 import jQ from 'jquery';
 window.jQ = jQ;
 
-import loginInit from './login';
-import './sweetAlertCustom';
+import loginInit from './login/login';
+import manageInit from './manage/manage';
+import './component/sweetAlertCustom';
 
 new Promise((resolve_, reject_) => {
     let config = JSON.parse(sessionStorage.getItem('uploadConfig'));
@@ -13,5 +14,7 @@ new Promise((resolve_, reject_) => {
         reject_();
     }
     resolve_(config);
-}).then().catch(loginInit);
+}).then(
+    // manageInit
+    ).catch(loginInit);
 

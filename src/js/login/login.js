@@ -1,5 +1,5 @@
 import jQ from 'jquery';
-import * as myLib from './myLib';
+import * as myLib from './../component/myLib';
 
 let loginInit = () => {
     let view = {
@@ -25,11 +25,11 @@ let loginInit = () => {
             if (!target_ instanceof jQ) {
                 throw 'Invalid target.';
             }
-            target_.eq(0).append(this.template);
+            target_.eq(0).empty().append(this.template);
         }
     };
+    let model = {};
     let controller = {
-        render() { },
         eventBind() {
             this.view.template.on('submit', (event_) => {
                 event_.preventDefault();
@@ -62,7 +62,7 @@ let loginInit = () => {
             this.eventBind();
         }
     };
-    controller.init(view, {}, jQ('#app'));
+    controller.init(view, model, jQ('#app'));
 };
 
 export default loginInit;

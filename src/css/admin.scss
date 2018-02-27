@@ -101,7 +101,7 @@ body {
         width: 30%;
         left: 0;
         top: $titleHeight;
-        bottom: 0;
+        bottom: $titleHeight*2;
         .song {
             @extend .showBackground;
             @extend .flexLineCenter;
@@ -134,7 +134,37 @@ body {
         }
         overflow-y: scroll;
     }
+    .fileSelector {
+        position: absolute;
+        width: 30%;
+        left: 0;
+        bottom: 0;
+        height: $titleHeight*2;
+        border-top: 1px solid #777;
+        .fileSelectorLabel {
+            @extend .showBackground; // display: block;
+            position: absolute;
+            $marginLength: 0.5rem;
+            top: $marginLength;
+            bottom: $marginLength;
+            left: $marginLength;
+            right: $marginLength;
+            background: #DFE3D5;
+            border: 1px #777 dashed;
+            border-bottom-left-radius: $marginLength;
+            input {
+                display: none;
+            }
+            @extend .flexRowCenter;
+            .tag {
+                text-align: center;
+                line-height: 1.5em;
+                font-size: 1.5em;
+            }
+        }
+    }
     .edit {
+        border-left: 1px solid #777;
         @extend .showBackground;
         position: absolute;
         font-size: 1.5rem;

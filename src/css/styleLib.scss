@@ -13,6 +13,7 @@ $yellow-dark: darkColor($yellow);
 * {
     padding: 0;
     margin: 0;
+    box-sizing: border-box;
 }
 
 input {
@@ -51,7 +52,7 @@ input {
 }
 
 .topBox {
-    border-radius: 0.5rem;
+    border-radius: 1rem;
     overflow: hidden;
 }
 
