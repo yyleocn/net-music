@@ -2,8 +2,9 @@
 
 import jQ from 'jquery';
 import fileLoader from './fileLoader';
+import editorInit from './editor';
 
-let manageInit = (target_) => {
+let manageInit = (target_, config_) => {
     console.log('Manage init');
     let view = {
         template: jQ(`
@@ -45,6 +46,7 @@ let manageInit = (target_) => {
 
             //sub component render
             fileLoader(this.view.subDom.fileLoader);
+            editorInit(this.view.subDom.editor, config_.QinniuToken);
         }
     };
     controller.init(view, model, target_);

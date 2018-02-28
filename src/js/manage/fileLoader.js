@@ -26,16 +26,29 @@ let fileLoaderInit = (target_) => {
         },
     };
     let controller = {
-        fileReader: new FileReader(),
         fileReaderHandler() {
 
         },
-        fileLoad(file_) {
+        fileLoad (file_) {
             jsmediatags.read(file_, {
                 onSuccess: (tag_) => {
-                    PubSub.publish('setMediaTags',tag_);
+                    PubSub.publish('fileLoaded', {
+                        file: file_,
+                        tags: tag_,
+                    });
                 },
                 onError: (err_) => {
+                    swal.confirm({
+                        title_: 'ID3信息不存在',
+                        text_: `　　没有读取到文件的ID3信息，请确认“${file_.name}”是否为一个音乐文件`,
+                    }).then((res_) => {
+                        if (!res_) {
+                            return;
+                        }
+                        PubSub.publish('fileLoaded', {
+                            file: file_,
+                        });
+                    });
                     console.log('error', err_);
                 },
             });
@@ -46,6 +59,9 @@ let fileLoaderInit = (target_) => {
             };
             let fileInputChange = (event_) => {
                 let file = event_.currentTarget.files[0];
+                if(!file){
+                    return;
+                }
                 this.fileLoad(file);
             };
             this.view.subDom.input.on('change', fileInputChange);

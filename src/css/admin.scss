@@ -168,41 +168,46 @@ body {
     border-left: 1px solid #777;
     @extend .showBackground;
     @extend .flexRowCenter;
+    text-align: center;
     position: absolute;
     font-size: 1.2rem;
     width: 70%;
     right: 0;
     top: $titleHeight;
     bottom: 0;
-    .table{
-      margin-bottom: 2em;
-      th{
+    .table {
+      th {
         text-align: right;
-        &::after{
+        &::after {
           content: '：';
           display: inline;
         }
       }
-      th,td{
-        padding:0.5em 0;
+      th, td {
+        padding: 0.5em 0;
       }
-      td.cover{
+      td.coverBox {
         padding: 2em;
       }
-      input{
-        line-height:  2em;
+      input {
+        line-height: 1.7em;
         padding: 0 0.5em;
-        border:2px solid #777;
-        outline:none;
-        &:focus{
-          border-color:$blue;
+        border: 2px solid #777;
+        outline: none;
+        &:focus {
+          border-color: $blue;
         }
       }
     }
-    input.save{
+    .save {
+      border: none;
+      border-radius: 0.5rem;
       padding: 0.5rem;
       color: #ffffff;
       background: $green-dark;
+      margin-top: 1rem;
+      cursor: pointer;
+      outline: none;
     }
   }
 }
