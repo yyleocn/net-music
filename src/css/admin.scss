@@ -1,176 +1,208 @@
 @import 'styleLib';
-$titleHeight:4rem;
+
+$titleHeight: 4rem;
 a {
-    color: inherit;
-    text-decoration: none;
+  color: inherit;
+  text-decoration: none;
 }
 
 .showBackground {
-    background: linear-gradient(135deg, #FFF, #DDD);
+  background: linear-gradient(135deg, #FFF, #DDD);
 }
 
 .backgroundEEE {
-    background: #EEEEEE;
+  background: #EEEEEE;
 }
 
 body {
-    overflow: hidden;
+  overflow: hidden;
 }
 
 #app {
-    overflow: hidden;
-    width: 100vw;
-    height: 100vh;
-    @extend .backgroundEEE;
-    @extend .flexRowCenter;
+  overflow: hidden;
+  width: 100vw;
+  height: 100vh;
+  @extend .backgroundEEE;
+  @extend .flexRowCenter;
 }
 
 .titleBox {
-    width: 100%;
-    line-height: $titleHeight;
-    background: #c11414;
-    color: #ffffff;
-    svg {
-        fill: #ffffff;
-    }
-    .icon {
-        height: 1.5em;
-        width: 1.5em;
-    }
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    div {
-        margin-left: 1rem;
-        padding-right: 1rem;
-    }
+  width: 100%;
+  line-height: $titleHeight;
+  background: #c11414;
+  color: #ffffff;
+  svg {
+    fill: #ffffff;
+  }
+  .icon {
+    height: 1.5em;
+    width: 1.5em;
+  }
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  div {
+    margin-left: 1rem;
+    padding-right: 1rem;
+  }
 }
 
 #login {
-    @extend .flexRowCenter;
-    @extend .boxShadow;
-    @extend .topBox;
-    background: #eee;
-    flex-direction: column;
-    text-align: center;
-    width: 400px;
-    font-size: 1.5rem;
-    padding-bottom: 1rem;
-    .title {
-        @extend .titleBox;
-        margin-bottom: 1.5rem;
+  @extend .flexRowCenter;
+  @extend .boxShadow;
+  @extend .topBox;
+  background: #eee;
+  flex-direction: column;
+  text-align: center;
+  width: 400px;
+  font-size: 1.5rem;
+  padding-bottom: 1rem;
+  .title {
+    @extend .titleBox;
+    margin-bottom: 1.5rem;
+  }
+  input {
+    padding: 0.5rem;
+    &.input {
+      display: block;
+      margin: 0 5rem 1.5rem;
     }
-    input {
-        padding: 0.5rem;
-        &.input {
-            display: block;
-            margin: 0 5rem 1.5rem;
-        }
-        &.error {
-            &::-webkit-input-placeholder {
-                color: red;
-            }
-        }
-        &.submit {
-            color: #ffffff;
-            background: $green-dark;
-        }
-        &.reset {
-            color: #ffffff;
-            background: $red-dark;
-        }
+    &.error {
+      &::-webkit-input-placeholder {
+        color: red;
+      }
     }
+    &.submit {
+      color: #ffffff;
+      background: $green-dark;
+    }
+    &.reset {
+      color: #ffffff;
+      background: $red-dark;
+    }
+  }
 }
 
 #manage {
-    @extend .showBackground;
-    position: relative;
-    @extend .boxShadow;
-    @extend .topBox;
-    width: 1000px;
-    height: 700px;
-    .title {
-        width: 100%;
-        @extend .titleBox;
-        font-size: 1.5rem;
-    }
-    .songList {
-        position: absolute;
-        list-style: none;
-        width: 30%;
-        left: 0;
-        top: $titleHeight;
-        bottom: $titleHeight*2;
-        .song {
-            @extend .showBackground;
-            @extend .flexLineCenter;
-            justify-content: space-between;
-            padding: 0 1rem;
-            background: #FFFFFF;
-            &:nth-child(2n) {
-                background: #F7f7f7;
-            }
-            .cover {
-                height: 4rem;
-                border-radius: 0.5rem;
-            }
-            .info {
-                @extend .showBackground;
-                width: 70%;
-                text-align: right;
-                .name {
-                    white-space: nowrap;
-                    text-overflow: ellipsis;
-                    font-size: 1.3em;
-                    overflow: hidden;
-                }
-                .artist {
-                    margin-top: 0.5em;
-                }
-            }
-            position: relative;
-            height: 5rem;
-        }
-        overflow-y: scroll;
-    }
-    .fileSelector {
-        position: absolute;
-        width: 30%;
-        left: 0;
-        bottom: 0;
-        height: $titleHeight*2;
-        border-top: 1px solid #777;
-        .fileSelectorLabel {
-            @extend .showBackground; // display: block;
-            position: absolute;
-            $marginLength: 0.5rem;
-            top: $marginLength;
-            bottom: $marginLength;
-            left: $marginLength;
-            right: $marginLength;
-            background: #DFE3D5;
-            border: 1px #777 dashed;
-            border-bottom-left-radius: $marginLength;
-            input {
-                display: none;
-            }
-            @extend .flexRowCenter;
-            .tag {
-                text-align: center;
-                line-height: 1.5em;
-                font-size: 1.5em;
-            }
-        }
-    }
-    .edit {
-        border-left: 1px solid #777;
+  @extend .showBackground;
+  position: relative;
+  @extend .boxShadow;
+  @extend .topBox;
+  width: 1000px;
+  height: 700px;
+  > .title {
+    width: 100%;
+    @extend .titleBox;
+    font-size: 1.5rem;
+  }
+  .songList {
+    position: absolute;
+    list-style: none;
+    width: 30%;
+    left: 0;
+    top: $titleHeight;
+    bottom: $titleHeight*2;
+    .song {
+      @extend .showBackground;
+      @extend .flexLineCenter;
+      justify-content: space-between;
+      padding: 0 1rem;
+      background: #FFFFFF;
+      &:nth-child(2n) {
+        background: #F7f7f7;
+      }
+      .cover {
+        height: 4rem;
+        border-radius: 0.5rem;
+      }
+      .info {
         @extend .showBackground;
-        position: absolute;
-        font-size: 1.5rem;
         width: 70%;
-        right: 0;
-        top: $titleHeight;
-        bottom: 0;
+        text-align: right;
+        .name {
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          font-size: 1.3em;
+          overflow: hidden;
+        }
+        .artist {
+          margin-top: 0.5em;
+        }
+      }
+      position: relative;
+      height: 5rem;
     }
+    overflow-y: scroll;
+  }
+  .fileLoader {
+    position: absolute;
+    width: 30%;
+    left: 0;
+    bottom: 0;
+    height: $titleHeight*2;
+    border-top: 1px solid #777;
+    .loaderLabel {
+      @extend .showBackground; // display: block;
+      position: absolute;
+      $marginLength: 0.5rem;
+      top: $marginLength;
+      bottom: $marginLength;
+      left: $marginLength;
+      right: $marginLength;
+      background: #DFE3D5;
+      border: 1px #777 dashed;
+      border-bottom-left-radius: $marginLength;
+      input {
+        display: none;
+      }
+      @extend .flexRowCenter;
+      .tag {
+        text-align: center;
+        line-height: 1.5em;
+        font-size: 1.5em;
+      }
+    }
+  }
+  .editor {
+    border-left: 1px solid #777;
+    @extend .showBackground;
+    @extend .flexRowCenter;
+    position: absolute;
+    font-size: 1.2rem;
+    width: 70%;
+    right: 0;
+    top: $titleHeight;
+    bottom: 0;
+    .table{
+      margin-bottom: 2em;
+      th{
+        text-align: right;
+        &::after{
+          content: '：';
+          display: inline;
+        }
+      }
+      th,td{
+        padding:0.5em 0;
+      }
+      td.cover{
+        padding: 2em;
+      }
+      input{
+        line-height:  2em;
+        padding: 0 0.5em;
+        border:2px solid #777;
+        outline:none;
+        &:focus{
+          border-color:$blue;
+        }
+      }
+    }
+    input.save{
+      padding: 0.5rem;
+      color: #ffffff;
+      background: $green-dark;
+    }
+  }
 }

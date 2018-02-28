@@ -1,3 +1,4 @@
+"use strict";
 const AV = require('leancloud-storage');
 
 const APP_ID = 'XnSndmRe6ecqgsV5lz8DLCHV-gzGzoHsz';

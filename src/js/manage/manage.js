@@ -1,4 +1,10 @@
-let manageInit = () => {
+"use strict";
+
+import jQ from 'jquery';
+import fileLoader from './fileLoader';
+
+let manageInit = (target_) => {
+    console.log('Manage init');
     let view = {
         template: jQ(`
         <div id="manage">
@@ -7,12 +13,12 @@ let manageInit = () => {
                     <use xlink:href="#icon-music"></use>
                 </svg>
                 <div>
-                    小乐de云音乐&emsp;歌曲管理
+                    小乐de云音乐　歌曲管理
                 </div>
             </div>
             <ul class="songList"></ul>
-            <div class="fileSelector"></div>
-            <div class="edit"></div>
+            <div class="fileLoader"></div>
+            <div class="editor"></div>
         </div>
         `),
         render(target_) {
@@ -20,6 +26,11 @@ let manageInit = () => {
                 throw 'Invalid target.';
             }
             target_.eq(0).empty().append(this.template);
+            this.subDom = {
+                songList: this.template.find('.songList'),
+                fileLoader: this.template.find('.fileLoader'),
+                editor: this.template.find('.editor'),
+            };
         },
     };
     let model = undefined;
@@ -31,13 +42,12 @@ let manageInit = () => {
             this.model = model_;
             this.view.render(target_);
             this.eventBind();
+
+            //sub component render
+            fileLoader(this.view.subDom.fileLoader);
         }
     };
-    controller.init(
-        view,
-        model,
-        jQ('#app')
-    );
-}
+    controller.init(view, model, target_);
+};
 
 export default manageInit;

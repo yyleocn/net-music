@@ -1,7 +1,8 @@
+"use strict";
 import jQ from 'jquery';
 import * as myLib from './../component/myLib';
 
-let loginInit = () => {
+let loginInit = (target_) => {
     let view = {
         template: jQ(`
         <form id="login">
@@ -48,7 +49,7 @@ let loginInit = () => {
                     );
                     myLib.reload('url');
                 }).catch((err_) => {
-                    console.log(err_)
+                    console.log(err_);
                     swal.error({
                         title_: err_.responseText,
                     });
@@ -62,7 +63,7 @@ let loginInit = () => {
             this.eventBind();
         }
     };
-    controller.init(view, model, jQ('#app'));
+    controller.init(view, model, target_);
 };
 
 export default loginInit;

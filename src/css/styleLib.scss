@@ -1,5 +1,5 @@
 @function darkColor($color_) {
-    @return darken($color_, 20%);
+  @return darken($color_, 20%);
 }
 
 $green: #5cb85c;
@@ -11,51 +11,56 @@ $blue-dark: darkColor($blue);
 $yellow: #ffe593;
 $yellow-dark: darkColor($yellow);
 * {
-    padding: 0;
-    margin: 0;
-    box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
 }
 
 input {
-    border: none;
-    border-radius: 0.3rem;
+  border: none;
+  border-radius: 0.3rem;
 }
 
 .icon {
-    font-size: 1em;
-    vertical-align: -0.15rem;
-    fill: currentColor;
-    overflow: hidden;
+  font-size: 1em;
+  vertical-align: -0.15rem;
+  fill: currentColor;
+  overflow: hidden;
 }
 
 .large {
-    font-size: 2rem;
+  font-size: 2rem;
 }
 
 .pageCenter {
-    position: fixed;
-    top: auto;
-    left: auto;
-    right: auto;
-    bottom: auto;
+  position: fixed;
+  top: auto;
+  left: auto;
+  right: auto;
+  bottom: auto;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .flexRowCenter {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+  @extend .flexCenter;
+  flex-direction: column;
 }
 
 .flexLineCenter {
-    @extend .flexRowCenter;
-    flex-direction: row;
+  @extend .flexCenter;
+  flex-direction: row;
 }
 
 .topBox {
-    border-radius: 1rem;
-    overflow: hidden;
+  border-radius: 1rem;
+  overflow: hidden;
 }
 
 .boxShadow {
-    box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
+  box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
 }
