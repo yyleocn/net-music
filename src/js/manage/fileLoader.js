@@ -33,66 +33,125 @@ let fileLoaderInit = (target_, token_) => {
         fileReaderHandler() {
 
         },
+        fileExistCheck(url_) {
+            return myLib.ajaxDetect({
+                url_: url_,
+            });
+        },
+        fileAvailable() {
+            return swal.confirm({
+                title_: '服务器端已存在相同文件，是否直接加载结果。'
+            }).then(
+                (choice_) => {
+                    console.log(choice_);
+                }
+            );
+        },
+        fileID3Read(file_) {
+            return new Promise((resolve_, reject_) => {
+                jsmediatags.read(file_, {
+                    onSuccess: (tag_) => {
+                        let tags = undefined;
+                        if (tag_.tags) {
+                            tags = {};
+                            [
+                                'album', 'artist', 'title',
+                            ].forEach((key_) => {
+                                tags[key_] = tag_.tags[key_];
+                            });
+                            if (tag_.tags.picture) {
+                                tags.cover = tag_.tags.picture;
+                            }
+                            resolve_(tags);
+                        }
+                        reject_('没有读取到文件的ID3信息');
+                    },
+                    onError: (err_) => {
+                        reject_('没有读取到文件的ID3信息');
+                        console.log('error', err_);
+                    },
+                });
+            })
+        },
+
+        passID3Tags(tags_) {
+            PubSub.publish('passID3Tags', tags_);
+        },
+
         fileLoad(file_) {
-            let fileExistCheck = (url_) => {
-                return myLib.ajaxDetect({
-                    url_: url_,
+            let fileMD5 = '';
+            let ID3Tag = undefined;
+            if (!file_) {
+                return;
+            }
+
+            let fileUpload = () => {
+                return promiseUpload({
+                    token_: token_,
+                    key_: fileMD5,
+                    file_: file_,
                 });
             };
-            let fileMD5 = '';
-            myLib.fileMD5Hash(file_).then(
+            let userCancel = () => {
+                return swal.error({
+                    title_: '用户取消了上传',
+                })
+            };
+
+            myLib.fileMD5Hash(
+                file_
+            ).then(
                 (res_) => {
                     fileMD5 = res_;
-                    return fileExistCheck(storageURL + res_);
+                    return this.fileExistCheck(storageURL + res_);
                 }
             ).then(
-                (fileExist_) => {
-                    swal.info({
-                        title_:'服务器文件已存在，将直接加载结果。'
-                    });
-                },
+                this.fileAvailable,
                 (res_) => {
-                    promiseUpload({
-                        token_:token_,
-                        key_:fileMD5,
-                        file_:file_,
-                    })
+                    return this.fileID3Read(file_).then(
+                        (tags_) => {
+                            ID3Tag = tags_;
+                            return swal.confirm({
+                                title_: '读取完毕',
+                                text_: `“${file_.name}”的MD5为“${fileMD5}”，确认开始上传`,
+                            }).then(
+                                () => {
+                                    return fileUpload().then(
+                                        () => {
+                                            if (tags_.cover) {
+                                                let binaryArr = new Uint8Array(tags_.cover.data);
+                                                let blobObj = new Blob([binaryArr.buffer]);
+                                                return promiseUpload({
+                                                    token_: token_,
+                                                    key_: fileMD5 + '-cover',
+                                                    file_: file_,
+                                                });
+                                            }
+                                        }
+                                    )
+                                },
+                                userCancel
+                            );
+                        },
+                        () => {
+                            return swal.confirm({
+                                title_: 'ID3读取错误',
+                                text_: '没有读取到ID3信息，可能不是音频文件，是否继续上传？',
+                            }).then(fileUpload, userCancel);
+                        }
+                    ).then(
+                        () => {
+                            if (ID3Tag) {
+                                this.passID3Tags(ID3Tag);
+                            }
+                        }
+                    );
+
                 }
-            ).catch(myLib.errorProcess);
-            jsmediatags.read(file_, {
-                onSuccess: (tag_) => {
-                    let tags = undefined;
-                    if (tag_.tags) {
-                        tags = {};
-                        [
-                            'album', 'artist', 'title',
-                        ].forEach((key_) => {
-                            tags[key_] = tag_.tags[key_];
-                        });
-                        if (tag_.tags.picture) {
-                            tags.cover = tag_.tags.picture;
-                        }
-                    }
-                    PubSub.publish('fileLoaded', {
-                        file: file_,
-                        tags: tags,
-                    });
-                },
-                onError: (err_) => {
-                    swal.confirm({
-                        title_: 'ID3信息不存在',
-                        text_: `　　没有读取到文件的ID3信息，请确认“${file_.name}”是否为一个音乐文件`,
-                    }).then((res_) => {
-                        if (!res_) {
-                            return;
-                        }
-                        PubSub.publish('fileLoaded', {
-                            file: file_,
-                        });
-                    });
-                    console.log('error', err_);
-                },
-            });
+            ).catch(
+                myLib.errorProcess
+            );
+
         },
         eventBind() {
             let fileUpload = () => {
