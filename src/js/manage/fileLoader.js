@@ -124,7 +124,7 @@ let fileLoaderInit = (target_, token_) => {
                                                 return promiseUpload({
                                                     token_: token_,
                                                     key_: fileMD5 + '-cover',
-                                                    file_: file_,
+                                                    file_: blobObj,
                                                 });
                                             }
                                         }
