@@ -19,13 +19,14 @@ new Promise((resolve_, reject_) => {
     resolve_(config);
 }).then(
     (config_) => {
-        manageInit(jQ('#app'),config_);
+        manageInit(jQ('#app'), config_);
     }
 ).catch((err_) => {
     console.warn(err_);
     loginInit(jQ('#app'));
 });
 
-PubSub.subscribe('fileLoaded', (msg_, data_) => {
-    console.log(data_);
-});
+
+// PubSub.subscribe('fileLoaded', (msg_, data_) => {
+//     console.log(data_);
+// });

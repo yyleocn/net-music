@@ -2,9 +2,13 @@
 
 import jQ from 'jquery';
 import jsmediatags from 'jsmediatags';
-// import * as myLib from './../component/myLib';
+import promiseUpload from './uploader';
 
-let fileLoaderInit = (target_) => {
+let storageURL = '//p3yt25jp4.bkt.clouddn.com/';
+
+import * as myLib from '../component/myLib';
+
+let fileLoaderInit = (target_, token_) => {
     let view = {
         template: jQ(`
         <label class="loaderLabel">
@@ -22,19 +26,56 @@ let fileLoaderInit = (target_) => {
             this.subDom = {
                 label: this.template,
                 input: this.template.find('input:file'),
-            }
+            };
         },
     };
     let controller = {
         fileReaderHandler() {
 
         },
-        fileLoad (file_) {
+        fileLoad(file_) {
+            let fileExistCheck = (url_) => {
+                return myLib.ajaxDetect({
+                    url_: url_,
+                });
+            };
+            let fileMD5 = '';
+            myLib.fileMD5Hash(file_).then(
+                (res_) => {
+                    fileMD5 = res_;
+                    return fileExistCheck(storageURL + res_);
+                }
+            ).then(
+                (fileExist_) => {
+                    swal.info({
+                        title_:'服务器文件已存在，将直接加载结果。'
+                    });
+                },
+                (res_) => {
+                    promiseUpload({
+                        token_:token_,
+                        key_:fileMD5,
+                        file_:file_,
+                    })
+                }
+            ).catch(myLib.errorProcess);
             jsmediatags.read(file_, {
                 onSuccess: (tag_) => {
+                    let tags = undefined;
+                    if (tag_.tags) {
+                        tags = {};
+                        [
+                            'album', 'artist', 'title',
+                        ].forEach((key_) => {
+                            tags[key_] = tag_.tags[key_];
+                        });
+                        if (tag_.tags.picture) {
+                            tags.cover = tag_.tags.picture;
+                        }
+                    }
                     PubSub.publish('fileLoaded', {
                         file: file_,
-                        tags: tag_,
+                        tags: tags,
                     });
                 },
                 onError: (err_) => {
@@ -59,7 +100,7 @@ let fileLoaderInit = (target_) => {
             };
             let fileInputChange = (event_) => {
                 let file = event_.currentTarget.files[0];
-                if(!file){
+                if (!file) {
                     return;
                 }
                 this.fileLoad(file);

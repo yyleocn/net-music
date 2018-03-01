@@ -208,6 +208,10 @@ body {
       margin-top: 1rem;
       cursor: pointer;
       outline: none;
+      &[disabled] {
+        color: #FFFFFF;
+        background: $green;
+      }
     }
   }
 }

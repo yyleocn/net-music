@@ -4,7 +4,8 @@
   "description": "XiaoLe net music",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "parcel": "parcel watch src/admin.html -d admin-server/dist/ --no-hmr"
   },
   "author": "",
   "license": "ISC",

@@ -1,9 +1,8 @@
 "use strict";
-import * as qiniu from 'qiniu-js'
 
+let defaultCoverURL = '//p3yt25jp4.bkt.clouddn.com/default.png';
 
-let editorInit = (target_, token_) => {
-    let defaultCoverURL = '//p3yt25jp4.bkt.clouddn.com/default.png';
+let editorInit = (target_) => {
     let view = {
         template: jQ(`
         <form id="editor">
@@ -13,9 +12,7 @@ let editorInit = (target_, token_) => {
                     <th>歌曲名</th>
                     <td><input type="text" placeholder="" maxlength="20" size="15" name="title"></td>
                     <td rowspan="6" class="coverBox">
-                        <object data="" class="cover" width="200px">
-                            <img src="//p3yt25jp4.bkt.clouddn.com/default.png" width="200px">
-                        </object>
+                        <img src="//p3yt25jp4.bkt.clouddn.com/default.png" class="cover"  width="200px">
                     </td>
                 </tr>
                 <tr class="artist">
@@ -32,7 +29,7 @@ let editorInit = (target_, token_) => {
                 </tr>
                 <tr class="fileName">
                     <th>文件名</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="title" disabled></td>
+                    <td><input type="text" placeholder="" maxlength="20" size="15" name="fileName" disabled></td>
                 </tr>
                 <tr class="MD5">
                     <th>MD5</th>
@@ -47,16 +44,44 @@ let editorInit = (target_, token_) => {
             <input type="submit" class="save" value="保存">
         </form>
         `),
-        render(target_, tags_) {
-            return new Promise((reject_, reserve_) => {
+        render(target_, data_) {
+            let template = this.template;
+            return new Promise((resolve_, reject_) => {
                 if (!target_ instanceof jQ) {
                     throw 'Invalid target.';
+                }
+                if (data_.tags) {
+                    [
+                        'title',
+                        'artist',
+                        'album',
+                    ].forEach((key_) => {
+                        template.find(`input[name=${key_}]`).val(data_.tags[key_]);
+                    });
+                    if (data_.tags.cover) {
+                        let binary64String = data_.tags.cover.data.map(
+                            item_ =>
+                                String.fromCharCode(item_)
+                        ).join('');
+                        template.find(`img.cover`).attr(
+                            'src',
+                            "data:" + data_.tags.cover.format + ";base64," + window.btoa(binary64String)
+                        );
+                        window.test = () => {
+
+                            let binaryArr = new Uint8Array(data_.tags.cover.data);
+                            let blobObj = new Blob([binaryArr.buffer]);
+                        };
+                    }
+                }
+                if (data_.file) {
+                    template.find('input[name=fileName]').val(data_.file.name);
                 }
                 target_.eq(0).empty().append(this.template);
                 this.subDom = {
                     form: this.template,
                 };
-                reject_();
+                resolve_();
             });
         },
     };
@@ -80,33 +105,7 @@ let editorInit = (target_, token_) => {
         eventBind() {
             this.view.subDom.form.on('submit', (event_) => {
                 event_.preventDefault();
-                if (this.model.data.file) {
-                    this.fileUpload(this.model.data.file);
-                }
             });
-        },
-        fileUpload(file_) {
-            let next = (response_) => {
-                console.log(response_.total.percent);
-            };
-            console.log(file_);
-            let config = {
-                useCdnDomain: true,
-                region: qiniu.region.z2
-            };
-            let putExtra = {
-                fname: "",
-                params: {},
-                mimeType: null
-            };
-            let observable = qiniu.upload(
-                file_,
-                file_.name,
-                token_,
-                putExtra,
-                config
-            );
-            observable.subscribe(next);
         },
         infoSave(data_) {
 
@@ -116,8 +115,12 @@ let editorInit = (target_, token_) => {
             this.model = model_;
             this.model.renderHandler = () => {
                 this.view.render(
-                    target_, this.model.data).then(this.eventBind()
-                );
+                    target_, this.model.data
+                ).then(() => {
+                    this.eventBind();
+                }).catch((err_) => {
+                    console.log(err_);
+                });
             };
             this.model.renderHandler(target_);
             PubSub.subscribe('fileLoaded', (msg_, data_) => {

@@ -45,8 +45,8 @@ let manageInit = (target_, config_) => {
             this.eventBind();
 
             //sub component render
-            fileLoader(this.view.subDom.fileLoader);
-            editorInit(this.view.subDom.editor, config_.QinniuToken);
+            fileLoader(this.view.subDom.fileLoader, config_.QinniuToken);
+            editorInit(this.view.subDom.editor);
         }
     };
     controller.init(view, model, target_);
