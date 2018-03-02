@@ -189,8 +189,9 @@ body {
       td.coverBox {
         padding: 2em;
       }
-      input {
-        line-height: 1.7em;
+      input,textarea {
+        resize: none;
+        line-height: 1.5em;
         padding: 0 0.5em;
         border: 2px solid #777;
         outline: none;

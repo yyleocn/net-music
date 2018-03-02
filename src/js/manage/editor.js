@@ -10,34 +10,36 @@ let editorInit = (target_) => {
                 <tbody>
                 <tr class="title">
                     <th>歌曲名</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="title"></td>
+                    <td><input type="text" placeholder="" maxlength="20" size="20" name="title"></td>
                     <td rowspan="6" class="coverBox">
                         <img src="//p3yt25jp4.bkt.clouddn.com/default.png" class="cover"  width="200px">
                     </td>
                 </tr>
                 <tr class="artist">
                     <th>歌手</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="artist"></td>
+                    <td><input type="text" placeholder="" maxlength="20" size="20" name="artist"></td>
                 </tr>
                 <tr class="album">
                     <th>专辑</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="album"></td>
+                    <td><input type="text" placeholder="" maxlength="20" size="20" name="album"></td>
                 </tr>
                 <tr class="cover">
                     <th>封面</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="cover"></td>
-                </tr>
-                <tr class="fileName">
-                    <th>文件名</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="fileName" disabled></td>
-                </tr>
-                <tr class="MD5">
-                    <th>MD5</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="md5" disabled></td>
+                    <td>
+                    <textarea type="text" placeholder="" name="cover" cols="20" rows="2"></textarea>
+                    </td>
                 </tr>
                 <tr class="url">
                     <th>URL</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="15" name="url" disabled></td>
+                    <td>
+                    <textarea type="text" placeholder="" name="url" cols="20" rows="2" disabled></textarea>
+                    </td>
+                </tr>
+                <tr class="fileName">
+                    <th>文件名</th>
+                    <td>
+                    <textarea type="text" placeholder="" name="fileName" cols="20" rows="2" disabled></textarea>
+                    </td>
                 </tr>
                 </tbody>
             </table>
@@ -50,36 +52,23 @@ let editorInit = (target_) => {
                 if (!target_ instanceof jQ) {
                     throw 'Invalid target.';
                 }
-                if (data_.tags) {
-                    [
-                        'title',
-                        'artist',
-                        'album',
-                    ].forEach((key_) => {
-                        template.find(`input[name=${key_}]`).val(data_.tags[key_]);
-                    });
-                    if (data_.tags.cover) {
-                        let binary64String = data_.tags.cover.data.map(
-                            item_ =>
-                                String.fromCharCode(item_)
-                        ).join('');
-                        template.find(`img.cover`).attr(
-                            'src',
-                            "data:" + data_.tags.cover.format + ";base64," + window.btoa(binary64String)
-                        );
-                        window.test = () => {
-
-                            let binaryArr = new Uint8Array(data_.tags.cover.data);
-                            let blobObj = new Blob([binaryArr.buffer]);
-                        };
-                    }
-                }
-                if (data_.file) {
-                    template.find('input[name=fileName]').val(data_.file.name);
+                [
+                    'title',
+                    'artist',
+                    'album',
+                    'fileName',
+                    'url',
+                    'cover',
+                ].forEach((key_) => {
+                    template.find(`[name=${key_}]`).val(data_[key_] || '');
+                });
+                if (data_.cover) {
+                    this.template.find('img.cover').attr('src', data_.cover);
                 }
                 target_.eq(0).empty().append(this.template);
                 this.subDom = {
                     form: this.template,
+                    coverImg: this.template.find('img.cover'),
                 };
                 resolve_();
             });
@@ -92,7 +81,7 @@ let editorInit = (target_) => {
             if (!attr_) {
                 return;
             }
-            if (attr_.file || attr_.url) {
+            if (attr_.url) {
                 this.data = Object.assign({}, attr_);
             }
             Object.assign(this.data, attr_);
@@ -105,6 +94,11 @@ let editorInit = (target_) => {
         eventBind() {
             this.view.subDom.form.on('submit', (event_) => {
                 event_.preventDefault();
+            });
+            this.view.subDom.coverImg.on('error', (event_) => {
+                if (event_.currentTarget.src !== defaultCoverURL) {
+                    event_.currentTarget.src = defaultCoverURL;
+                }
             });
         },
         infoSave(data_) {
@@ -123,7 +117,7 @@ let editorInit = (target_) => {
                 });
             };
             this.model.renderHandler(target_);
-            PubSub.subscribe('fileLoaded', (msg_, data_) => {
+            PubSub.subscribe('passID3Tags', (msg_, data_) => {
                 this.model.setAttr(data_);
             });
         },

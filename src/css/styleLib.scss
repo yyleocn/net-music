@@ -16,7 +16,7 @@ $yellow-dark: darkColor($yellow);
   box-sizing: border-box;
 }
 
-input {
+input,textarea {
   border: none;
   border-radius: 0.3rem;
 }

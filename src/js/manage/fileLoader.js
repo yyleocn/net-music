@@ -38,7 +38,7 @@ let fileLoaderInit = (target_, token_) => {
                 url_: url_,
             });
         },
-        fileAvailable() {
+        fileExist() {
             return swal.confirm({
                 title_: '服务器端已存在相同文件，是否直接加载结果。'
             }).then(
@@ -51,16 +51,17 @@ let fileLoaderInit = (target_, token_) => {
             return new Promise((resolve_, reject_) => {
                 jsmediatags.read(file_, {
                     onSuccess: (tag_) => {
-                        let tags = undefined;
+                        let tags = {
+                            fileName: file_.name,
+                        };
                         if (tag_.tags) {
-                            tags = {};
                             [
                                 'album', 'artist', 'title',
                             ].forEach((key_) => {
                                 tags[key_] = tag_.tags[key_];
                             });
                             if (tag_.tags.picture) {
-                                tags.cover = tag_.tags.picture;
+                                tags.coverImg = tag_.tags.picture;
                             }
                             resolve_(tags);
                         }
@@ -93,9 +94,10 @@ let fileLoaderInit = (target_, token_) => {
                 });
             };
             let userCancel = () => {
+                console.log('Upload cancel');
                 return swal.error({
                     title_: '用户取消了上传',
-                })
+                });
             };
 
             myLib.fileMD5Hash(
@@ -103,23 +105,27 @@ let fileLoaderInit = (target_, token_) => {
             ).then(
                 (res_) => {
                     fileMD5 = res_;
-                    return this.fileExistCheck(storageURL + res_);
+                    return this.fileExistCheck(storageURL + fileMD5);
                 }
             ).then(
-                this.fileAvailable,
+                this.fileExist,
                 (res_) => {
                     return this.fileID3Read(file_).then(
                         (tags_) => {
                             ID3Tag = tags_;
+                            tags_.url = storageURL + fileMD5;
                             return swal.confirm({
                                 title_: '读取完毕',
                                 text_: `“${file_.name}”的MD5为“${fileMD5}”，确认开始上传`,
                             }).then(
-                                () => {
+                                (res_) => {
+                                    if (!res_) {
+                                        return userCancel();
+                                    }
                                     return fileUpload().then(
                                         () => {
-                                            if (tags_.cover) {
-                                                let binaryArr = new Uint8Array(tags_.cover.data);
+                                            if (tags_.coverImg) {
+                                                let binaryArr = new Uint8Array(tags_.coverImg.data);
                                                 let blobObj = new Blob([binaryArr.buffer]);
                                                 return promiseUpload({
                                                     token_: token_,
@@ -128,25 +134,35 @@ let fileLoaderInit = (target_, token_) => {
                                                 });
                                             }
                                         }
+                                    ).then(
+                                        () => {
+                                            tags_.cover = storageURL + fileMD5 + '-cover';
+                                        }
                                     )
-                                },
-                                userCancel
+                                }
                             );
                         },
                         () => {
                             return swal.confirm({
                                 title_: 'ID3读取错误',
                                 text_: '没有读取到ID3信息，可能不是音频文件，是否继续上传？',
-                            }).then(fileUpload, userCancel);
+                            }).then(
+                                (res_) => {
+                                    if (res_) {
+                                        return fileUpload();
+                                    }
+                                    return userCancel();
+                                }
+                            );
                         }
                     ).then(
                         () => {
-                            if (ID3Tag) {
-                                this.passID3Tags(ID3Tag);
-                            }
+                            console.log('Pass');
+                            this.passID3Tags(
+                                ID3Tag || {fileName: file_.name}
+                            );
                         }
                     );
-
                 }
             ).catch(
                 myLib.errorProcess
