@@ -186,17 +186,26 @@ body {
       th, td {
         padding: 0.5em 0;
       }
+      td{
+        text-align: left;
+      }
+
       td.coverBox {
         padding: 2em;
       }
-      input,textarea {
+
+      textarea {
         resize: none;
-        line-height: 1.5em;
-        padding: 0 0.5em;
-        border: 2px solid #777;
-        outline: none;
-        &:focus {
-          border-color: $blue;
+      }
+
+      .coverSelector{
+        @extend .inputDefault;
+        color: #ffffff;
+        background: $blue-dark;
+        border: none;
+        padding: 0.3em 2em;
+        input{
+          display: none;
         }
       }
     }

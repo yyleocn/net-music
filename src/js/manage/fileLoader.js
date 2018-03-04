@@ -113,10 +113,9 @@ let fileLoaderInit = (target_, token_) => {
                     return this.fileID3Read(file_).then(
                         (tags_) => {
                             ID3Tag = tags_;
-                            tags_.url = storageURL + fileMD5;
                             return swal.confirm({
                                 title_: '读取完毕',
-                                text_: `“${file_.name}”的MD5为“${fileMD5}”，确认开始上传`,
+                                text_: `“${file_.name}”的Key为\n“${fileMD5}”\n开始上传？`,
                             }).then(
                                 (res_) => {
                                     if (!res_) {
@@ -158,6 +157,7 @@ let fileLoaderInit = (target_, token_) => {
                     ).then(
                         () => {
                             console.log('Pass');
+                            ID3Tag.key = fileMD5;
                             this.passID3Tags(
                                 ID3Tag || {fileName: file_.name}
                             );

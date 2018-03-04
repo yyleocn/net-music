@@ -7,26 +7,22 @@ import jQ from 'jquery';
 
 window.jQ = jQ;
 
+import leanCloud from './component/leancloud';
 import loginInit from './login/login';
 import manageInit from './manage/manage';
 import './component/sweetAlertCustom';
 
-new Promise((resolve_, reject_) => {
-    let config = JSON.parse(sessionStorage.getItem('uploadConfig'));
-    if (!config.QinniuToken) {
-        reject_();
+let appInit = () => {
+    if (leanCloud.User.current()) {
+        manageInit(jQ('#app'), '123');
+        return;
     }
-    resolve_(config);
-}).then(
-    (config_) => {
-        manageInit(jQ('#app'), config_);
-    }
-).catch((err_) => {
-    console.warn(err_);
     loginInit(jQ('#app'));
-});
+};
 
 
+
+window.leanCloud = leanCloud;
 // PubSub.subscribe('fileLoaded', (msg_, data_) => {
 //     console.log(data_);
 // });

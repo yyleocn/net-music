@@ -2,7 +2,7 @@
 
 let defaultCoverURL = '//p3yt25jp4.bkt.clouddn.com/default.png';
 
-let editorInit = (target_) => {
+let editorInit = (target_, leanCloud_) => {
     let view = {
         template: jQ(`
         <form id="editor">
@@ -23,22 +23,20 @@ let editorInit = (target_) => {
                     <th>专辑</th>
                     <td><input type="text" placeholder="" maxlength="20" size="20" name="album"></td>
                 </tr>
-                <tr class="cover">
-                    <th>封面</th>
-                    <td>
-                    <textarea type="text" placeholder="" name="cover" cols="20" rows="2"></textarea>
-                    </td>
-                </tr>
-                <tr class="url">
-                    <th>URL</th>
-                    <td>
-                    <textarea type="text" placeholder="" name="url" cols="20" rows="2" disabled></textarea>
-                    </td>
+                <tr class="key">
+                    <th>Key</th>
+                    <td><input type="text" placeholder="" maxlength="20" size="20" name="key" disabled></td>
                 </tr>
                 <tr class="fileName">
                     <th>文件名</th>
                     <td>
-                    <textarea type="text" placeholder="" name="fileName" cols="20" rows="2" disabled></textarea>
+                    <input type="text" placeholder="" maxlength="20" size="20" name="fileName" disabled></textarea>
+                    </td>
+                </tr>
+                <tr class="cover">
+                    <th>封面</th>
+                    <td>
+                        <label class="coverSelector">选择封面文件<input type="file" name="coverSelector"></label>
                     </td>
                 </tr>
                 </tbody>
@@ -57,8 +55,7 @@ let editorInit = (target_) => {
                     'artist',
                     'album',
                     'fileName',
-                    'url',
-                    'cover',
+                    'key',
                 ].forEach((key_) => {
                     template.find(`[name=${key_}]`).val(data_[key_] || '');
                 });
@@ -122,7 +119,8 @@ let editorInit = (target_) => {
             });
         },
     };
-    controller.init(view, model, target_);
+    controller.init(view, model, target_, leanCloud_);
+    console.log(leanCloud_);
 };
 
 

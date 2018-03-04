@@ -46,7 +46,7 @@ let manageInit = (target_, config_) => {
 
             //sub component render
             fileLoader(this.view.subDom.fileLoader, config_.QinniuToken);
-            editorInit(this.view.subDom.editor);
+            editorInit(this.view.subDom.editor, config_.leanCloud);
         }
     };
     controller.init(view, model, target_);

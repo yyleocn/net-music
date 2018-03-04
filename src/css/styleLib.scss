@@ -16,11 +16,6 @@ $yellow-dark: darkColor($yellow);
   box-sizing: border-box;
 }
 
-input,textarea {
-  border: none;
-  border-radius: 0.3rem;
-}
-
 .icon {
   font-size: 1em;
   vertical-align: -0.15rem;
@@ -63,4 +58,19 @@ input,textarea {
 
 .boxShadow {
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
+}
+
+.inputDefault{
+  line-height: 1.5em;
+  padding: 0 0.5em;
+  border: 2px solid #777;
+  outline: none;
+  border-radius: 0.3rem;
+  &:focus{
+    border-color: $blue;
+  }
+}
+
+input,textarea{
+  @extend .inputDefault;
 }
