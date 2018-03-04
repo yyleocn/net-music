@@ -2,7 +2,7 @@
 import jQ from 'jquery';
 import * as myLib from './../component/myLib';
 
-let loginInit = (target_) => {
+let loginInit = (target_, leanCloud_) => {
     let view = {
         template: jQ(`
         <form id="login">
@@ -35,14 +35,20 @@ let loginInit = (target_) => {
             this.view.template.on('submit', (event_) => {
                 event_.preventDefault();
                 let form = this.view.template;
-                let postData = {
+                let loginData = {
                     account: form.find('input[name=account]').val(),
                     password: form.find('input[name=password]').val(),
                 };
+                leanCloud_.User.logIn(
+                    loginData.account,
+                    loginData.password
+                ).then(
+
+                );
                 jQ.ajax({
                     url: '/get-token.php',
                     type: 'post',
-                    data: postData,
+                    data: loginData,
                 }).then((response_) => {
                     sessionStorage.setItem(
                         'uploadConfig', JSON.stringify(response_)
@@ -63,7 +69,7 @@ let loginInit = (target_) => {
             this.eventBind();
         }
     };
-    controller.init(view, model, target_);
+    controller.init(view, model, target_, leanCloud_);
 };
 
 export default loginInit;

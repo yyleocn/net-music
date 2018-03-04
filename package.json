@@ -7,7 +7,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "parcel src/admin.html -p 1234 --no-hmr",
     "token": "node ./tokenServer/server.js",
-    "fullDev": "concurrently --kill-others \"parcel src/admin.html -p 1234 --no-hmr\" \"node ./tokenServer/server.js\""
+    "devAll": "concurrently --kill-others \"npm run dev\" \"npm run token\""
   },
   "author": "",
   "license": "ISC",

@@ -33,6 +33,7 @@ let server = http.createServer((request_, response_) => {
     if (pathNoQuery === '/token') {
         let putPolicy = new QiNiu.rs.PutPolicy(options);
         let uploadToken = putPolicy.uploadToken(mac);
+        console.log(uploadToken);
         response_.write(uploadToken);
         response_.end();
         return
