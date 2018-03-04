@@ -1,14 +1,14 @@
 "use strict";
 
 import jQ from 'jquery';
-import jsmediatags from 'jsmediatags';
-import promiseUpload from './uploader';
+import * as QiNiuHandler from '../component/qiniuHandler';
+import readMediaID3 from  '../component/readMediaID3';
+import fileMD5Hash from  '../component/fileMD5Hash';
 
-let storageURL = '//p3yt25jp4.bkt.clouddn.com/';
 
 import * as myLib from '../component/myLib';
 
-let fileLoaderInit = (target_, token_) => {
+let fileLoaderInit = (target_, config_) => {
     let view = {
         template: jQ(`
         <label class="loaderLabel">
@@ -30,69 +30,81 @@ let fileLoaderInit = (target_, token_) => {
         },
     };
     let controller = {
-        fileReaderHandler() {
-
-        },
-        fileExistCheck(url_) {
+        fileExistCheck(md5_) {
+            // QiNiuHandler.fileList({
+            //     token_:config_.token,
+            //     bucket_:config_.bucket,
+            //     prefix_:md5_,
+            // });
             return myLib.ajaxDetect({
-                url_: url_,
+                url_: config_.storageURL + md5_,
             });
         },
-        fileExist() {
+        fileExist(md5_) {
+            console.log('File exist.');
             return swal.confirm({
                 title_: '服务器端已存在相同文件，是否直接加载结果。'
             }).then(
                 (choice_) => {
-                    console.log(choice_);
+                    if (!choice_) {
+                        return
+                    }
+                    PubSub.publish('loadInfoByKey', md5_)
                 }
             );
         },
-        fileID3Read(file_) {
-            return new Promise((resolve_, reject_) => {
-                jsmediatags.read(file_, {
-                    onSuccess: (tag_) => {
-                        let tags = {
-                            fileName: file_.name,
-                        };
-                        if (tag_.tags) {
-                            [
-                                'album', 'artist', 'title',
-                            ].forEach((key_) => {
-                                tags[key_] = tag_.tags[key_];
-                            });
-                            if (tag_.tags.picture) {
-                                tags.coverImg = tag_.tags.picture;
-                            }
-                            resolve_(tags);
-                        }
-                        reject_('没有读取到文件的ID3信息');
-                    },
-                    onError: (err_) => {
-                        reject_('没有读取到文件的ID3信息');
-                        console.log('error', err_);
-                    },
-                });
-            })
-        },
 
         passID3Tags(tags_) {
+            console.log('Pass ID3 tag');
             PubSub.publish('passID3Tags', tags_);
         },
 
         fileLoad(file_) {
             let fileMD5 = '';
-            let ID3Tag = undefined;
+            let ID3Tag = {};
             if (!file_) {
                 return;
             }
 
             let fileUpload = () => {
-                return promiseUpload({
-                    token_: token_,
+                return QiNiuHandler.promiseUpload({
+                    token_: config_.token,
                     key_: fileMD5,
                     file_: file_,
                 });
             };
+
+            let fileID3Loaded = (tags_) => {
+                ID3Tag = tags_;
+                return swal.confirm({
+                    title_: '读取完毕',
+                    text_: `“${file_.name}”的Key为“${fileMD5}”开始上传？`,
+                }).then(
+                    (res_) => {
+                        if (!res_) {
+                            return userCancel();
+                        }
+                        return fileUpload().then(
+                            () => {
+                                if (ID3Tag.coverImg) {
+                                    let binaryArr = new Uint8Array(ID3Tag.coverImg.data);
+                                    let blobObj = new Blob([binaryArr.buffer]);
+                                    return QiNiuHandler.promiseUpload({
+                                        token_: config_.token,
+                                        key_: fileMD5 + '-cover',
+                                        file_: blobObj,
+                                    }).then(
+                                        () => {
+                                            ID3Tag.cover = true;
+                                        }
+                                    );
+                                }
+                            }
+                        )
+                    }
+                );
+            };
+
             let userCancel = () => {
                 console.log('Upload cancel');
                 return swal.error({
@@ -100,47 +112,20 @@ let fileLoaderInit = (target_, token_) => {
                 });
             };
 
-            myLib.fileMD5Hash(
+            fileMD5Hash(
                 file_
             ).then(
                 (res_) => {
                     fileMD5 = res_;
-                    return this.fileExistCheck(storageURL + fileMD5);
+                    return this.fileExistCheck(fileMD5);
                 }
             ).then(
-                this.fileExist,
+                () => {
+                    this.fileExist(fileMD5);
+                },
                 (res_) => {
-                    return this.fileID3Read(file_).then(
-                        (tags_) => {
-                            ID3Tag = tags_;
-                            return swal.confirm({
-                                title_: '读取完毕',
-                                text_: `“${file_.name}”的Key为\n“${fileMD5}”\n开始上传？`,
-                            }).then(
-                                (res_) => {
-                                    if (!res_) {
-                                        return userCancel();
-                                    }
-                                    return fileUpload().then(
-                                        () => {
-                                            if (tags_.coverImg) {
-                                                let binaryArr = new Uint8Array(tags_.coverImg.data);
-                                                let blobObj = new Blob([binaryArr.buffer]);
-                                                return promiseUpload({
-                                                    token_: token_,
-                                                    key_: fileMD5 + '-cover',
-                                                    file_: blobObj,
-                                                });
-                                            }
-                                        }
-                                    ).then(
-                                        () => {
-                                            tags_.cover = storageURL + fileMD5 + '-cover';
-                                        }
-                                    )
-                                }
-                            );
-                        },
+                    return readMediaID3(file_).then(
+                        fileID3Loaded,
                         () => {
                             return swal.confirm({
                                 title_: 'ID3读取错误',
@@ -156,12 +141,12 @@ let fileLoaderInit = (target_, token_) => {
                         }
                     ).then(
                         () => {
-                            console.log('Pass');
                             ID3Tag.key = fileMD5;
                             this.passID3Tags(
                                 ID3Tag || {fileName: file_.name}
                             );
-                        }
+                        },
+                        myLib.errorProcess()
                     );
                 }
             ).catch(
@@ -175,6 +160,7 @@ let fileLoaderInit = (target_, token_) => {
             };
             let fileInputChange = (event_) => {
                 let file = event_.currentTarget.files[0];
+                event_.currentTarget.value = '';
                 if (!file) {
                     return;
                 }

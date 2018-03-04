@@ -3,15 +3,15 @@ const url = require('url');
 
 const QiNiu = require('qiniu');
 
-const QiNiuData = require('./qiniu.config');
+const QiNiuConfig = require('./qiniu.config');
 
 let mac = new QiNiu.auth.digest.Mac(
-    QiNiuData.accessKey,
-    QiNiuData.secretKey
+    QiNiuConfig.accessKey,
+    QiNiuConfig.secretKey
 );
 
 let options = {
-    scope: QiNiuData.bucket,
+    scope: QiNiuConfig.bucket,
     expires: 3600 * 12,
 };
 
@@ -33,7 +33,6 @@ let server = http.createServer((request_, response_) => {
     if (pathNoQuery === '/token') {
         let putPolicy = new QiNiu.rs.PutPolicy(options);
         let uploadToken = putPolicy.uploadToken(mac);
-        console.log(uploadToken);
         response_.write(uploadToken);
         response_.end();
         return

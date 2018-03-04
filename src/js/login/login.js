@@ -1,6 +1,6 @@
 "use strict";
 import jQ from 'jquery';
-import * as myLib from './../component/myLib';
+import * as myLib from '../component/myLib';
 
 let loginInit = (target_, leanCloud_) => {
     let view = {
@@ -43,23 +43,28 @@ let loginInit = (target_, leanCloud_) => {
                     loginData.account,
                     loginData.password
                 ).then(
-
+                    (loginUser_) => {
+                        swal.success({
+                            title_: '登录成功，跳转中',
+                        });
+                        setTimeout(() => {
+                            myLib.reload('url');
+                        }, 2000);
+                    },
+                    (err_) => {
+                        let errMsg = '登录错误';
+                        switch (err_.code) {
+                            case 210:
+                            case 211: {
+                                errMsg = '账号密码错误';
+                                break;
+                            }
+                        }
+                        swal.error({
+                            title_: errMsg,
+                        });
+                    }
                 );
-                jQ.ajax({
-                    url: '/get-token.php',
-                    type: 'post',
-                    data: loginData,
-                }).then((response_) => {
-                    sessionStorage.setItem(
-                        'uploadConfig', JSON.stringify(response_)
-                    );
-                    myLib.reload('url');
-                }).catch((err_) => {
-                    console.log(err_);
-                    swal.error({
-                        title_: err_.responseText,
-                    });
-                });
             });
         },
         init(view_, model_, target_) {
@@ -69,7 +74,7 @@ let loginInit = (target_, leanCloud_) => {
             this.eventBind();
         }
     };
-    controller.init(view, model, target_, leanCloud_);
+    controller.init(view, model, target_);
 };
 
 export default loginInit;

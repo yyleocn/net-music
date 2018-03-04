@@ -1,15 +1,12 @@
-@function darkColor($color_) {
-  @return darken($color_, 20%);
-}
 
 $green: #5cb85c;
-$green-dark: darkColor($green);
+$green-dark: darken($green, 20%);
 $red: #e7594a;
-$red-dark: darkColor($red);
+$red-dark: darken($red, 20%);
 $blue: #5bc0de;
-$blue-dark: darkColor($blue);
+$blue-dark: darken($blue, 20%);
 $yellow: #ffe593;
-$yellow-dark: darkColor($yellow);
+$yellow-dark: darken($yellow, 35%);
 * {
   padding: 0;
   margin: 0;
@@ -60,17 +57,21 @@ $yellow-dark: darkColor($yellow);
   box-shadow: 0 5px 16px rgba(0, 0, 0, 0.8);
 }
 
-.inputDefault{
+.inputDefault {
   line-height: 1.5em;
-  padding: 0 0.5em;
-  border: 2px solid #777;
+  padding: 0.3em 0.5em;
   outline: none;
   border-radius: 0.3rem;
-  &:focus{
-    border-color: $blue;
-  }
+  border:none;
 }
 
-input,textarea{
+input, textarea {
   @extend .inputDefault;
+}
+
+input[type=text],input[type=password],textarea{
+  border: 2px solid #777;
+  &:focus {
+    border-color: $blue;
+  }
 }

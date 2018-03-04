@@ -27,6 +27,7 @@ body {
 }
 
 .titleBox {
+  position: relative;
   width: 100%;
   line-height: $titleHeight;
   background: #c11414;
@@ -60,7 +61,9 @@ body {
   padding-bottom: 1rem;
   .title {
     @extend .titleBox;
+    font-size: 1.5em;
     margin-bottom: 1.5rem;
+    padding: 1rem 0;
   }
   input {
     padding: 0.5rem;
@@ -95,6 +98,14 @@ body {
     width: 100%;
     @extend .titleBox;
     font-size: 1.5rem;
+    button.logout {
+      @extend .inputDefault;
+      background: $yellow-dark;
+      color: #ffffff;
+      position: absolute;
+      right: 2em;
+      cursor: pointer;
+    }
   }
   .songList {
     position: absolute;
@@ -183,44 +194,51 @@ body {
           display: inline;
         }
       }
+
       th, td {
         padding: 0.5em 0;
       }
-      td{
+
+      td {
         text-align: left;
       }
 
       td.coverBox {
-        padding: 2em;
+        padding: 0 2em;
       }
 
       textarea {
         resize: none;
       }
 
-      .coverSelector{
-        @extend .inputDefault;
-        color: #ffffff;
-        background: $blue-dark;
-        border: none;
-        padding: 0.3em 2em;
-        input{
+      .fileSelector {
+        input[type=file] {
           display: none;
         }
       }
-    }
-    .save {
-      border: none;
-      border-radius: 0.5rem;
-      padding: 0.5rem;
-      color: #ffffff;
-      background: $green-dark;
-      margin-top: 1rem;
-      cursor: pointer;
-      outline: none;
-      &[disabled] {
-        color: #FFFFFF;
-        background: $green;
+
+      .fileSelector, .save {
+        @extend .inputDefault;
+        color: #ffffff;
+        padding: 0.3em 2em;
+        cursor: pointer;
+        outline: none;
+      }
+
+      .fileSelector {
+        background: $blue-dark;
+      }
+
+      .buttonBox {
+        text-align: center;
+      }
+
+      .save {
+        background: $green-dark;
+        &[disabled] {
+          color: #FFFFFF;
+          background: $green;
+        }
       }
     }
   }
