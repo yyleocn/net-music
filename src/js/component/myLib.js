@@ -15,39 +15,6 @@ let addEvent = (elem_, type_, func_) => {
     addEvent(elem_, type_, func_);
 };
 
-let leftPadding = (str_, length_, pad_) => {
-    if (typeof str_ !== 'string' || typeof length_ !== 'number') {
-        throw 'Invalid arguments.';
-    }
-    let pad = typeof pad_ === 'string' ? pad_ : ' ';
-    let res = str_;
-    while (res.length < length_) {
-        res = pad_ + res;
-    }
-    return res;
-};
-
-// let createTag = function (tag_, attr_) {
-//     let tagObj = document.createElement(tag_);
-//     if (attr_) {
-//         for (let key in attr_) {
-//             let attr = attr_[key];
-//             switch (key) {
-//                 case 'className':
-//                     {
-//                         tagObj[key] = Array.isArray(attr) ? attr.join(' ') : attr;
-//                         break;
-//                     }
-//                 default:
-//                     {
-//                         tagObj[key] = attr;
-//                     }
-//             }
-//         }
-//     }
-//     return tagObj;
-// };
-
 let ajaxDetect = ({url_, method_, body_, success_, fail_, test_}) => {
     return new Promise((resolve_, reject_) => {
         let request = new XMLHttpRequest();
@@ -92,8 +59,6 @@ let errorProcess = (err_) => {
 
 export {
     addEvent,
-    leftPadding,
-    // createTag,
     reload,
     errorProcess,
     ajaxDetect,
