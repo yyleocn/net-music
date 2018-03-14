@@ -49,20 +49,20 @@ let leftPadding = (str_, length_, pad_) => {
 // };
 
 let ajaxDetect = ({url_, method_, body_, success_, fail_, test_}) => {
-    return new Promise(function (resolve_, reject_) {
+    return new Promise((resolve_, reject_) => {
         let request = new XMLHttpRequest();
         request.open(method_ || 'get', url_);
-        request.onreadystatechange = (event_) => {
+        request.addEventListener('readystatechange', (event_) => {
             if (request.status >= 200) {
                 let requestStatus = request.status;
                 request.abort();
                 if (requestStatus > 300) {
-                    reject_.call(undefined, request);
+                    resolve_(false);
                     return
                 }
-                resolve_.call(undefined, request);
+                resolve_(true);
             }
-        };
+        });
         request.send(body_);
     });
 };
@@ -78,7 +78,7 @@ let reload = (method_) => {
             return
         }
         default: {
-            document.location.href = document.location.href;
+            document.location.href = document.location.href.toString();
         }
     }
 };

@@ -26,8 +26,8 @@ let editorInit = (target_, config_) => {
                     <td><input type="text" placeholder="" maxlength="20" size="20" name="album"></td>
                 </tr>
                 <tr class="key">
-                    <th>Key</th>
-                    <td><input type="text" placeholder="" maxlength="20" size="20" name="key" disabled></td>
+                    <th>MD5</th>
+                    <td><input type="text" placeholder="" maxlength="20" size="20" name="md5" disabled></td>
                 </tr>
                 <tr class="fileName">
                     <th>封面</th>
@@ -62,12 +62,12 @@ let editorInit = (target_, config_) => {
                     'artist',
                     'album',
                     'fileName',
-                    'key',
+                    'md5',
                 ].forEach((key_) => {
                     template.find(`[name=${key_}]`).val(data_[key_] || '');
                 });
-                if (data_.key) {
-                    this.template.find('img.cover').attr('src', config_.storageURL + data_.key + '-cover');
+                if (data_.md5 && data_.cover) {
+                    this.template.find('img.cover').attr('src', config_.storageURL + data_.md5 + '-cover');
                 }
                 target_.eq(0).empty().append(this.template);
                 this.subDom = {
@@ -111,7 +111,7 @@ let editorInit = (target_, config_) => {
             });
             songObj.save();
         },
-        infoLoad(key_){
+        infoLoad(key_) {
             let modelObj = this.model;
             let query = new config_.leanCloud.Query('song');
             query.equalTo('key', key_);

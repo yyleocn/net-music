@@ -20,11 +20,10 @@ let readMediaID3=(file_) =>{
                     resolve_(tags);
                     return;
                 }
-                reject_('没有读取到文件的ID3信息');
-            },
+                resolve_();
+        },
             onError: (err_) => {
-                console.log('error', err_);
-                reject_('没有读取到文件的ID3信息');
+                resolve_();
             },
         });
     });

@@ -5,9 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "parcel src/admin.html -p 1234 --no-hmr",
+    "parcel": "parcel src/admin.html -p 1234 --no-hmr",
     "token": "node ./tokenServer/server.js",
-    "devAll": "concurrently --kill-others \"npm run dev\" \"npm run token\""
+    "dev": "concurrently --kill-others \"npm run parcel\" \"npm run token\""
   },
   "author": "",
   "license": "ISC",

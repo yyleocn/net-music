@@ -48,6 +48,6 @@ let appInit = () => {
 appInit();
 
 window.lc = leanCloud;
-// PubSub.subscribe('fileLoaded', (msg_, data_) => {
-//     console.log(data_);
-// });
+PubSub.subscribe('passID3Tags', (msg_, data_) => {
+    console.log(data_);
+});

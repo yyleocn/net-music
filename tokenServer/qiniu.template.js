@@ -1,5 +1,5 @@
 'use strict';
-exports.default = {
+module.exports = {
     accessKey: '',
     secretKey: '',
     bucket: '',
