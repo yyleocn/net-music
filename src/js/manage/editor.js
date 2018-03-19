@@ -4,7 +4,7 @@ import readMediaID3 from '../component/readMediaID3';
 let defaultCoverURL = '//p3yt25jp4.bkt.clouddn.com/default.png';
 
 
-let editorInit = (target_, config_) => {
+let editorInit = ({target: target_, config: config_}) => {
     let view = {
         template: jQ(`
         <form id="editor">
@@ -153,7 +153,7 @@ let editorInit = (target_, config_) => {
                 )
             });
         },
-        init(view_, model_, target_) {
+        init({view:view_,model:model_,target:target_}) {
             this.view = view_;
             this.model = model_;
             this.model.renderHandler = () => {
@@ -175,7 +175,11 @@ let editorInit = (target_, config_) => {
 
         },
     };
-    controller.init(view, model, target_);
+    controller.init({
+        view:view,
+        model:model,
+        target:target_,
+    });
 };
 
 

@@ -37,12 +37,18 @@ let appInit = () => {
         jQ.ajax(tokenURL).then(
             (token_) => {
                 config.token = token_;
-                manageInit(jQ('#app'), config);
+                manageInit({
+                    target: jQ('#app'),
+                    config: config
+                });
             }
         );
         return;
     }
-    loginInit(jQ('#app'), leanCloud);
+    loginInit({
+        target: jQ('#app'),
+        config: config
+    });
 };
 
 appInit();

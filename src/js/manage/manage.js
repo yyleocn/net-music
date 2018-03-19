@@ -5,7 +5,7 @@ import fileLoader from './fileLoader';
 import editorInit from './editor';
 import * as myLib from '../component/myLib';
 
-let manageInit = (target_, config_) => {
+let manageInit = ({target: target_, config: config_}) => {
     console.log('Manage init');
     let view = {
         template: jQ(`
@@ -41,34 +41,48 @@ let manageInit = (target_, config_) => {
     let controller = {
         logout(){
             swal.confirm({
-                title_:'确认要注销么？',
-            }).then((res_)=>{
-                if(!res_){
+                title_: '确认要注销么？',
+            }).then((res_) => {
+                if (!res_) {
                     return;
                 }
                 config_.leanCloud.User.logOut();
                 swal.success({
                     title_: '注销成功，再见',
                 });
-                setTimeout(()=>{
+                setTimeout(() => {
                     myLib.reload('url');
-                },2000)
+                }, 2000)
             });
         },
         eventBind() {
-            this.view.subDom.logout.on('click',this.logout);
+            this.view.subDom.logout.on('click', this.logout);
         },
-        init(view_, model_, target_) {
+        init({
+                 view: view_,
+                 model: model_,
+                 target: target_
+             }) {
             this.view = view_;
             this.model = model_;
             this.view.render(target_);
             this.eventBind();
             //sub component render
-            fileLoader(this.view.subDom.fileLoader, config_);
-            editorInit(this.view.subDom.editor, config_);
+            fileLoader({
+                target: this.view.subDom.fileLoader,
+                config: config_,
+            });
+            editorInit({
+                target: this.view.subDom.editor,
+                config: config_,
+            });
         }
     };
-    controller.init(view, model, target_);
+    controller.init({
+        view: view,
+        model: model,
+        target: target_,
+    });
 };
 
 export default manageInit;

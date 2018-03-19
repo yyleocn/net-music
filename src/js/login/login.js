@@ -2,7 +2,7 @@
 import jQ from 'jquery';
 import * as myLib from '../component/myLib';
 
-let loginInit = (target_, leanCloud_) => {
+let loginInit = ({target: target_, config: config_}) => {
     let view = {
         template: jQ(`
         <form id="login">
@@ -39,7 +39,7 @@ let loginInit = (target_, leanCloud_) => {
                     account: form.find('input[name=account]').val(),
                     password: form.find('input[name=password]').val(),
                 };
-                leanCloud_.User.logIn(
+                config_.leanCloud.User.logIn(
                     loginData.account,
                     loginData.password
                 ).then(
@@ -67,14 +67,18 @@ let loginInit = (target_, leanCloud_) => {
                 );
             });
         },
-        init(view_, model_, target_) {
+        init({view: view_, model: model_, target: target_}) {
             this.view = view_;
             this.model = model_;
             this.view.render(target_);
             this.eventBind();
         }
     };
-    controller.init(view, model, target_);
+    controller.init({
+        view: view,
+        model: model,
+        target: target_,
+    });
 };
 
 export default loginInit;
