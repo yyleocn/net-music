@@ -40,7 +40,7 @@ let fileLoaderInit = (target_, config_) => {
                     url_: config_.storageURL + md5_,
                 });
             },
-            fileExist: async function (md5_) {
+            async fileExist (md5_) {
                 if (
                     await swal.confirm({
                         title_: '服务器端已存在相同文件，是否直接加载结果。'
@@ -63,7 +63,7 @@ let fileLoaderInit = (target_, config_) => {
             },
 
 
-            fileLoad: async function (file_) {
+            async fileLoad(file_) {
                 if (!file_) {
                     return;
                 }
